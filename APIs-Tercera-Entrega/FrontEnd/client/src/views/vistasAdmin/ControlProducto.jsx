@@ -55,7 +55,8 @@ const filteredProducts = products.filter((pro) => {
           value={filterCategory}
           onChange={(e) => {
             setFilterCategory(e.target.value);
-            dispatch(setPage(1));
+            if(currentPage!=1)
+            {dispatch(setPage(1));}
           }}
         >
           <option value="">Todas</option>
@@ -72,7 +73,9 @@ const filteredProducts = products.filter((pro) => {
           value={busqueda}
           onChange={(e) => {
             dispatch(setBusqueda(e.target.value));
-            dispatch(setPage(1)); // resetear a página 1 al buscar
+            if (currentPage !== 1) {
+              dispatch(setPage(1));
+            }
           }}
           placeholder="Nombre o descripción..."
           style={{ color: "black" }}

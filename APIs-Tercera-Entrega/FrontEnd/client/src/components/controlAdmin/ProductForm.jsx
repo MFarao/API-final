@@ -71,12 +71,14 @@ const ProductForm = ({ product, onClose }) => {
     .then(async (res) => {
     // 🔹 Si se asignó un descuento, actualizamos también el discount en Redux
 
-      const updateBody ={ 
-        id: formData.discountId,
-        productsId: [product.id],
-        categoriesId: []
-      };
-      await dispatch(updateDiscount(updateBody)).unwrap();
+      if (product && formData.discountId) {
+        const updateBody = {
+          id: formData.discountId,
+          productsId: [product.id],
+          categoriesId: []
+        };
+        await dispatch(updateDiscount(updateBody)).unwrap();
+      }
 
       Swal.fire({
         title: "Producto cargado ✅",

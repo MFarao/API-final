@@ -392,3 +392,12 @@
   font-weight: 600;
   color: #6b21a8;
 }
+input[type="date"] {
+  color: black; /* texto dentro del input */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) saturate(100%);
+  opacity: 1;
+  cursor: pointer;
+}
