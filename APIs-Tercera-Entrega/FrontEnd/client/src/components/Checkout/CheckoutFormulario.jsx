@@ -4,7 +4,7 @@ import { setConectado, setEnvio } from "../../redux/uiSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const CheckoutFormulario = () => {
-  const {conectado} = useSelector((state) => state.UIs);
+  const {conectado, envio } = useSelector((state) => state.UIs);
   const dispatch = useDispatch();
 
   const handleConnect = () => {
@@ -18,7 +18,7 @@ const CheckoutFormulario = () => {
       <div className="checkout-subtotal">
         <p>Rellene sus datos:</p>
         <form className="forms">
-          <input type="text" placeholder="Ingrese su direccion " onChange={(e) => dispatch(setEnvio(e.target.value))} />
+          <input type="text" placeholder="Ingrese su direccion " value={envio} onChange={(e) => dispatch(setEnvio(e.target.value))} />
           <button type="button" className={`btn-mercadopago ${conectado ? "active" : ""}`} 
           onClick={handleConnect}
           disabled={conectado}>
