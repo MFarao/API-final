@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductForm from "../../components/controlAdmin/ProductForm";
 import ProductRow from "../../components/controlAdmin/ProductRow";
-import { in_activateProduct,  setPage } from "../../redux/productSlice";
+import { in_activateProduct,  setPage, setBusqueda } from "../../redux/productSlice";
 
 const ControlProducto = () => {
   const dispatch = useDispatch();
-  const { items: products, loading, error } = useSelector((state) => state.products);
+  const { items: products, loading, error, busqueda } = useSelector((state) => state.products);
   const { items: categories } = useSelector((state) => state.categories);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -22,12 +22,18 @@ const ControlProducto = () => {
     dispatch(in_activateProduct(id));
   };
   
-  const filteredProducts = filterCategory
-    ? products.filter((pro) => String(pro.categoryId) === filterCategory)
-    : products;
+const filteredProducts = products.filter((pro) => {
+    const matchesCategory = filterCategory ? String(pro.categoryId) === filterCategory : true;
+    const matchesSearch =
+      busqueda === "" ||
+      pro.name.toLowerCase().includes(busqueda.toLowerCase()) ||
+      pro.description.toLowerCase().includes(busqueda.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
-  const start = (currentPage - 1) * 10; // 10 = pageSize
-  const end = start + 10;
+
+  const start = (currentPage - 1) * 12; 
+  const end = start + 12;
   const visibleProducts = filteredProducts.slice(start, end);
 
   const totalPagesFiltered = Math.max(1, Math.ceil(filteredProducts.length / 10));
@@ -59,6 +65,18 @@ const ControlProducto = () => {
             </option>
           ))}
         </select>
+
+        <label style={{ marginLeft: "20px" }}>Buscar: </label>
+        <input
+          type="text"
+          value={busqueda}
+          onChange={(e) => {
+            dispatch(setBusqueda(e.target.value));
+            dispatch(setPage(1)); // resetear a página 1 al buscar
+          }}
+          placeholder="Nombre o descripción..."
+          style={{ color: "black" }}
+        />
       </div>
 
       <div className="pagination">
